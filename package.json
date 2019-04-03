@@ -1,0 +1,31 @@
+{
+    "name": "movie-dex-api",
+    "version": "1.0.0",
+    "description": "",
+    "main": "app.js",
+    "scripts": {
+        "test": "mocha",
+        "start": "node app",
+        "dev": "nodemon app"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/quonn-bernard/movie-dex-api.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/quonn-bernard/movie-dex-api/issues"
+    },
+    "homepage": "https://github.com/quonn-bernard/movie-dex-api#readme",
+    "dependencies": {
+        "express": "^4.16.4",
+        "morgan": "^1.9.1"
+    },
+    "devDependencies": {
+        "chai": "^4.2.0",
+        "mocha": "^6.0.2",
+        "nodemon": "^1.18.10",
+        "supertest": "^4.0.2"
+    }
+}
