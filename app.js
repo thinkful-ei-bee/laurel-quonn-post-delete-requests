@@ -1,6 +1,6 @@
 //auth credss
 require('dotenv').config()
-
+const  uuid = require('uuid');
 //cors
 const cors = require('cors')
 // server variables
@@ -81,8 +81,8 @@ function handlePostMovies(req, res) {
     // actors : "Mickey Rourke, Steve Guttenberg, Ellen Barkin" avg_vote : 7.1
     // country : "United States" director : "Barry Levinson" duration : 95
     // film_title : "Diner" filmtv_ID : 18 genre : "Comedy" votes : 14 year : 1982
-    const {film_title, year, actors, avg_vote, country} = req.body;
-    let newMovieProps = {"country": country, "avg_vote": avg_vote, "actors": actors, "year": year, "film_title": film_title};
+    const {film_title, year, actors, avg_vote, country, movieId} = req.body;
+    let newMovieProps = {"country": country, "avg_vote": avg_vote, "actors": actors, "year": year, "film_title": film_title, "movieId": movieId};
     // validates user input
     
     if (!actors || !avg_vote || !country) {
