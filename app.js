@@ -1,14 +1,18 @@
-//auth credss
+//auth creds
 require('dotenv').config()
-const  uuid = require('uuid');
+
+const uuid = require('uuid');
+
 //cors
 const cors = require('cors')
+
 // server variables
 const express = require('express');
 const app = express();
 
 // logs env variable to the console
 console.log(`@line9 >>> process.env.API_TOKEN = ${process.env.API_TOKEN}`)
+
 // app data
 let moviedex = require('./moviedex.json')
 
@@ -68,7 +72,7 @@ function handleGetMovies(req, res) {
                 .send('That resource was not found, try another search')
         }
     }
-    
+
     res.send(movies)
     // returns filtered movies list to the client
 
@@ -78,13 +82,26 @@ function handleGetMovies(req, res) {
 app.get('/movie', handleGetMovies)
 
 function handlePostMovies(req, res) {
-    // actors : "Mickey Rourke, Steve Guttenberg, Ellen Barkin" avg_vote : 7.1
-    // country : "United States" director : "Barry Levinson" duration : 95
-    // film_title : "Diner" filmtv_ID : 18 genre : "Comedy" votes : 14 year : 1982
-    const {film_title, year, actors, avg_vote, country, movieId} = req.body;
-    let newMovieProps = {"country": country, "avg_vote": avg_vote, "actors": actors, "year": year, "film_title": film_title, "movieId": movieId};
-    // validates user input
     
+    const {
+        film_title,
+        year,
+        actors,
+        avg_vote,
+        country,
+        movieId
+    } = req.body;
+
+    let newMovieProps = {
+        "country": country,
+        "avg_vote": avg_vote,
+        "actors": actors,
+        "year": year,
+        "film_title": film_title,
+        "movieId": uuid()
+    };
+
+    // validates user input
     if (!actors || !avg_vote || !country) {
         return res
             .status(400)
@@ -121,14 +138,25 @@ function handlePostMovies(req, res) {
             .send('Country must be 4 chars or longer!!!')
     }
 
-    moviedex = [...moviedex, newMovieProps];
+    moviedex = [
+        newMovieProps, ...moviedex
+    ];
 
-    console.log(req.body);
     res.send('POST Request received');
 };
 
+
 // handles post requests
 app.post('/movie', handlePostMovies)
+
+function handleDeleteMovies(req, res) {
+    const { userId } = req.params;
+    console.log(userId);
+    res.send('Got it.');
+}
+
+// handles delete requests
+app.delete('/movie/:movieId', handleDeleteMovies)
 
 // Port number
 const PORT = 8000
