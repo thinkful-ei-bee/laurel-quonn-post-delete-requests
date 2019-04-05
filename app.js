@@ -82,7 +82,7 @@ function handleGetMovies(req, res) {
 app.get('/movie', handleGetMovies)
 
 function handlePostMovies(req, res) {
-    
+
     const {
         film_title,
         year,
@@ -145,14 +145,36 @@ function handlePostMovies(req, res) {
     res.send('POST Request received');
 };
 
-
 // handles post requests
 app.post('/movie', handlePostMovies)
 
 function handleDeleteMovies(req, res) {
-    const { userId } = req.params;
-    console.log(userId);
-    res.send('Got it.');
+
+    // grabs id of movie to be deleted
+    const movieId = req.params.movieId;
+
+    // will be used to store movie with id that matches movieId
+    let match;
+
+    // filter through dataset and return a match
+    const matchedMovie = moviedex.filter((movie, i) => {
+        if (movie.filmtv_ID === parseInt(movieId)) {
+            
+            //removes match from data set 
+            moviedex.splice(i, 1)
+            match = movie
+        }
+        return match
+    });
+
+    // if there is a match, return 'deleted' message else return 404 error = error message
+    if (matchedMovie.length > 0) {
+        res.send(`Deleted movie with id of ${movieId}`)
+    } else {
+        res
+            .status(404)
+            .send(`Movie with id of ${movieId} not found`)
+    };
 }
 
 // handles delete requests
