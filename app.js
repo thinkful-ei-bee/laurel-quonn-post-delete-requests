@@ -6,9 +6,17 @@ const uuid = require('uuid');
 //cors
 const cors = require('cors')
 
+// helmet
+const helmet = require('helmet')
+
+//token validator
+const validateToken = require('./src/validate-token')
+
 // server variables
 const express = require('express');
 const app = express();
+
+app.use(helmet())
 
 // logs env variable to the console
 console.log(`@line9 >>> process.env.API_TOKEN = ${process.env.API_TOKEN}`)
@@ -27,19 +35,7 @@ app.use(cors())
 app.use(express.static('public'));
 
 // validates client token against env token
-app.use(function validateBearerToken(req, res, next) {
-
-    console.log('validate bearer token working as it should!')
-
-    // client token
-    const bearerToken = req.query.token;
-
-    // env token
-    const apiToken = process.env.API_TOKEN
-
-    // move to the next middleware
-    next();
-})
+app.use(validateToken)
 
 // handles API request results
 function handleGetMovies(req, res) {
