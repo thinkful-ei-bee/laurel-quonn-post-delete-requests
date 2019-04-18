@@ -81,6 +81,8 @@ function handleGetMovies(req, res) {
 // moviedex API call
 app.get('/movie', handleGetMovies)
 
+
+//handles a user posting a movie
 function handlePostMovies(req, res) {
 
     const {
