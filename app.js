@@ -6,9 +6,17 @@ const uuid = require('uuid');
 //cors
 const cors = require('cors')
 
+// helmet
+const helmet = require('helmet')
+
+//token validator
+const validateToken = require('./src/validate-token')
+
 // server variables
 const express = require('express');
 const app = express();
+
+app.use(helmet())
 
 // logs env variable to the console
 console.log(`@line9 >>> process.env.API_TOKEN = ${process.env.API_TOKEN}`)
@@ -27,19 +35,7 @@ app.use(cors())
 app.use(express.static('public'));
 
 // validates client token against env token
-app.use(function validateBearerToken(req, res, next) {
-
-    console.log('validate bearer token working as it should!')
-
-    // client token
-    const bearerToken = req.query.token;
-
-    // env token
-    const apiToken = process.env.API_TOKEN
-
-    // move to the next middleware
-    next();
-})
+app.use(validateToken)
 
 // handles API request results
 function handleGetMovies(req, res) {
@@ -161,15 +157,16 @@ function handleDeleteMovies(req, res) {
     // filter through dataset and return a match
     const matchedMovie = moviedex.filter((movie, i) => {
         if (movie.filmtv_ID === parseInt(movieId)) {
-            
-            //removes match from data set 
+
+            //removes match from data set
             moviedex.splice(i, 1)
             match = movie
         }
         return match
     });
 
-    // if there is a match, return 'deleted' message else return 404 error = error message
+    // if there is a match, return 'deleted' message else return 404 error = error
+    // message
     if (matchedMovie.length > 0) {
         res.send(`Deleted movie with id of ${movieId}`)
     } else {
@@ -182,10 +179,5 @@ function handleDeleteMovies(req, res) {
 // handles delete requests
 app.delete('/movie/:movieId', handleDeleteMovies)
 
-// Port number
-const PORT = 8000
 
-// tells server which port to listen to
-app.listen(PORT, () => {
-    console.log(`Server listening on PORT 8000`)
-})
+module.exports = app
